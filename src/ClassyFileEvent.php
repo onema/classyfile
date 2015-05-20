@@ -7,6 +7,7 @@
  */
 namespace Onema\ClassyFile;
 
+use PhpParser\Node\Stmt;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
@@ -21,10 +22,15 @@ class ClassyFileEvent extends GenericEvent
     const SET_CLASS = 'classyfile.set_class';
 
     /**
-     * @return mixed
+     * @return \PhpParser\Node\Stmt $statement
      */
     public function getStatement()
     {
-        return $this->getSubject();
+        return $this->getArgument('statement');
+    }
+
+    public function setStatement(Stmt $statement)
+    {
+        $this->setArgument('statement', $statement);
     }
 }

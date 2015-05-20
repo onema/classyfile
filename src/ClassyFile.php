@@ -87,13 +87,16 @@ class ClassyFile
                     }
 
                     if ($this->dispatcher) {
-                        $event = $this->dispatch(ClassyFileEvent::TRAVERSE, null, [
+                        $event = $this->dispatch(ClassyFileEvent::TRAVERSE, [
                             'statements' => $statements,
                             'create_namespace' => $createNamespace,
                             'offset' => $offset,
                             'length' => $length
                         ]);
-                        list($statements, $createNamespace, $offset, $length) = $event->getArguments();
+                        $statements = $event->getArgument('statements');
+                        $createNamespace = $event->getArgument('create_namespace');
+                        $offset = $event->getArgument('offset');
+                        $length = $event->getArgument('length');
                     }
 
                     $this->traverseStatements($statements, $namespace);
@@ -151,8 +154,6 @@ class ClassyFile
         $comments = $statement->getDocComment();
         $comments = isset($comments) ? $comments->getText() : '';
 
-        $code = $this->prettyPrinter->pStmt_Class($statement);
-
         if ($namespace == 'tmp') {
             $namespace = '';
         } else {
@@ -160,15 +161,19 @@ class ClassyFile
         }
 
         if ($this->dispatcher) {
-            $event = $this->dispatch(ClassyFileEvent::SET_CLASS, $statement, [
+            $event = $this->dispatch(ClassyFileEvent::SET_CLASS, [
+                'statement' => $statement,
                 'namespace' => $namespace,
                 'file_location' => $fileLocation,
                 'uses' => $uses
             ]);
-
-            list($namespace, $fileLocation, $uses) = $event->getArguments();
+            $namespace = $event->getArgument('namespace');
+            $fileLocation = $event->getArgument('file_location');
+            $uses = $event->getArgument('uses');
+            $statement = $event->getStatement();
         }
 
+        $code = $this->prettyPrinter->pStmt_Class($statement);
         $code =
             '<?php'.
             PHP_EOL.PHP_EOL.
@@ -190,14 +195,10 @@ class ClassyFile
         file_put_contents(sprintf('%s/%s.php', $fileLocation, $name), $code);
     }
 
-    protected function dispatch($eventName, $statement = null, array $arguments = [])
+    protected function dispatch($eventName, array $arguments = [])
     {
-        $event = new ClassyFileEvent($statement, $arguments);
-        $this->dispatcher->dispatch(
-            $eventName,
-            $event
-        );
-
+        $event = new ClassyFileEvent(null, $arguments);
+        $this->dispatcher->dispatch($eventName, $event);
         return $event;
     }
 }
