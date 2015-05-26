@@ -83,9 +83,9 @@ class ClassyFileTest extends \PHPUnit_Framework_TestCase
         $codeDestination = '/tmp/';
         $classyfile->generateClassFiles($codeDestination, $codeLocation, true, 6, 4);
 
-        $this->assertFileExists('/tmp/Vendor/Api/Category/ProductName/Date.php');
-        $this->assertFileExists('/tmp/Vendor/Api/Category/ProductName/DateRange.php');
-        $this->assertFileExists('/tmp/Vendor/Api/Category/ProductName/OrderBy.php');
+        $this->assertFileExists('/tmp/VendorName/ProjectName/Category/ProductName/Date.php');
+        $this->assertFileExists('/tmp/VendorName/ProjectName/Category/ProductName/DateRange.php');
+        $this->assertFileExists('/tmp/VendorName/ProjectName/Category/ProductName/OrderBy.php');
 
         // Delete all files/
         $filesystem = new Filesystem(new Local($codeDestination));
