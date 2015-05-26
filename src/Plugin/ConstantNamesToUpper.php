@@ -44,15 +44,10 @@ class ConstantNamesToUpper implements EventSubscriberInterface
         if ($statements instanceof Class_) {
             $count = count($statements->stmts);
             for ($i = 0; $i < $count; $i++) {
-
                 if (is_array($statements->stmts)) {
                     $statement = $statements->stmts[$i];
                     $this->toUpper($statement);
                     $statements->stmts[$i] = $statement;
-                } else {
-                    $statement = $statements->stmts;
-                    $this->toUpper($statement);
-                    $statements->stmts = $statement;
                 }
             }
         }
