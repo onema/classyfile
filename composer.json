@@ -11,7 +11,7 @@
     }
   ],
   "require": {
-    "nikic/php-parser": "2.0@dev",
+    "nikic/php-parser": "2.0.*@dev",
     "symfony/event-dispatcher" : "3.0.*@dev",
     "symfony/console": "3.0.*@dev",
     "league/flysystem": "^1.0",
