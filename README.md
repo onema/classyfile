@@ -1,4 +1,4 @@
-# classyfile
+# classyfile [![Build Status](https://travis-ci.org/onema/classyfile.svg)](https://travis-ci.org/onema/classyfile) 
 Provides a way to break PHP files containing multiple classes and creates single files per class.
 This can be useful when refactoring old libraries. 
 
