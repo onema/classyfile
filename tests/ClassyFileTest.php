@@ -89,7 +89,7 @@ class ClassyFileTest extends \PHPUnit_Framework_TestCase
 
         // Delete all files/
         $filesystem = new Filesystem(new Local($codeDestination));
-        $filesystem->deleteDir('/Vendor/');
+        $filesystem->deleteDir('/VendorName/');
     }
 
     public function testClassToFileConversionStyle2NoNamespaces()
