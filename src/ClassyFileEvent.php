@@ -19,7 +19,8 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 class ClassyFileEvent extends GenericEvent
 {
     const TRAVERSE = 'classyfile.traverse';
-    const SET_CLASS = 'classyfile.set_class';
+    const GET_CLASS = 'classyfile.get_class';
+    const AFTER_GET_CLASS = 'classyfile.after_get_class';
 
     /**
      * @return \PhpParser\Node\Stmt $statement
