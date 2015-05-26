@@ -1,4 +1,4 @@
-# classyfile [![Build Status](https://travis-ci.org/onema/classyfile.svg)](https://travis-ci.org/onema/classyfile) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/7cd81039-46d2-4a18-b57b-6242cb18f3b4/mini.png)](https://insight.sensiolabs.com/projects/7cd81039-46d2-4a18-b57b-6242cb18f3b4)
+# classyfile [![Build Status](https://travis-ci.org/onema/classyfile.svg?branch=master)](https://travis-ci.org/onema/classyfile) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/7cd81039-46d2-4a18-b57b-6242cb18f3b4/mini.png)](https://insight.sensiolabs.com/projects/7cd81039-46d2-4a18-b57b-6242cb18f3b4)
 Provides a way to break PHP files containing multiple classes and creates single files per class.
 This can be useful when refactoring old libraries. 
 
