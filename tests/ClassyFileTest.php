@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the CPCStrategy {test} Package. 
+ * This file is part of the Onema {test} Package.
  * For the full copyright and license information, 
  * please view the LICENSE file that was distributed 
  * with this source code.
@@ -15,8 +15,8 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 /**
  * ClassyFileTest - Description. 
  *
- * @author Juan Manuel Torres <juan@cpcstrategy.com>
- * @copyright (c) 2015, CPC Strategy Development Team
+ * @author Juan Manuel Torres <kinojman@gmail.com.com>
+ * @copyright (c) 2015, Onema
  * @group classyfile
  */
 class ClassyFileTest extends \PHPUnit_Framework_TestCase
