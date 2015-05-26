@@ -29,7 +29,7 @@ class ConstantNamesToUpper implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return [ClassyFileEvent::SET_CLASS => ['onSetClassUpdateConstants', 10]];
+        return [ClassyFileEvent::GET_CLASS => ['onSetClassUpdateConstants', 10]];
     }
 
     /**
@@ -66,8 +66,8 @@ class ConstantNamesToUpper implements EventSubscriberInterface
             $countConst = count($statement->consts);
             for ($j = 0; $j < $countConst; $j++) {
                 $constant = $statement->consts[$j];
-                $name = preg_replace('/(?<=\\w)(?=[A-Z])/',"_$1", $constant->name);
-                $constant->name = strtoupper($name);
+                $name = strtoupper(preg_replace('/([^A-Z])([A-Z])/', "$1_$2", $constant->name));
+                $constant->name = str_replace('__', '_', $name);
                 $statement->consts[$j] = $constant;
             }
         }
