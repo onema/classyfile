@@ -79,7 +79,7 @@ class ClassyFileTest extends \PHPUnit_Framework_TestCase
         $dispatcher = new EventDispatcher();
         $classyfile->setEventDispatcher($dispatcher);
 
-        $codeLocation = __DIR__.'/mock/src/Vendor/Api/Category/ProductName/v123456/';
+        $codeLocation = __DIR__.'/mock/src/VendorName/ProjectName/Category/ProductName/v123456/';
         $codeDestination = '/tmp/';
         $classyfile->generateClassFiles($codeDestination, $codeLocation, true, 6, 4);
 
@@ -99,7 +99,7 @@ class ClassyFileTest extends \PHPUnit_Framework_TestCase
         $dispatcher = new EventDispatcher();
         $classyfile->setEventDispatcher($dispatcher);
 
-        $codeLocation = __DIR__.'/mock/src/Vendor/Api/Category/ProductName/v123456/';
+        $codeLocation = __DIR__.'/mock/src/VendorName/ProjectName/Category/ProductName/v123456/';
         $codeDestination = '/tmp/';
         $classyfile->generateClassFiles($codeDestination, $codeLocation);
 
