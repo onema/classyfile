@@ -8,11 +8,13 @@
 namespace Onema\ClassyFile\Command;
 
 use Onema\ClassyFile\ClassyFile;
+use Onema\ClassyFile\Plugin\ConstantNamesToUpper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * GenerateClassesFromFileCommand - Description.
@@ -28,9 +30,16 @@ class GenerateClassesFromFileCommand extends Command
             ->setName('convert')
             ->setDescription('Opens a directory and reads every PHP file, it takes the classes in the file and generates one file per class.')
             ->addArgument(
-                'path-to-directory',
+                'code-location',
                 InputArgument::REQUIRED,
-                'Path to the directory containing the PHP files.'
+                'Path to the directory containing the PHP files that will be converted.'
+            )
+            ->addOption(
+                'code-destination',
+                'd',
+                InputOption::VALUE_REQUIRED,
+                'Path to the directory where the new generated files will be saved. Default CWD.',
+                getcwd()
             )
             ->addOption(
                 'create-namespace',
@@ -52,16 +61,31 @@ class GenerateClassesFromFileCommand extends Command
                 'Length is used if the create namespace is enabled, it determines how many sections of the path to use starting at the given offset.',
                 1
             )
+            ->addOption(
+                'constants-to-upper',
+                null,
+                InputOption::VALUE_NONE,
+                'Adds a plugin to convert constant names to uppercase e.g. constantName to CONSTANT_NAME.'
+            )
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $filePath = $input->getArgument('path-to-directory');
+        $codeLocation = $input->getArgument('code-location');
+        $codeDestination = $input->getOption('code-destination');
         $createNamespace = $input->getOption('create-namespace');
         $offset = $input->getOption('offset');
         $length = $input->getOption('length');
         $classyfile = new ClassyFile();
-        $classyfile->generateClassFiles($filePath, $createNamespace, $offset, $length);
+        $dispatcher = new EventDispatcher();
+
+        if ($input->getOption('constants-to-upper')) {
+            $plugin = new ConstantNamesToUpper();
+            $dispatcher->addSubscriber($plugin);
+        }
+
+        $classyfile->setEventDispatcher($dispatcher);
+        $classyfile->generateClassFiles($codeDestination, $codeLocation, $createNamespace, $offset, $length);
     }
 }
