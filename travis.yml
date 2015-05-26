@@ -1,0 +1,25 @@
+# see http://about.travis-ci.org/docs/user/languages/php/ for more hints
+language: php
+
+# list any PHP version you want to test against
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+
+before_install:
+  - sudo apt-get update > /dev/null
+
+# execute any number of scripts before the test run, custom env's are available as variables
+before_script:
+  - composer install --no-interaction
+
+# whitelist
+branches:
+  only:
+    - develop
+
+# omitting "script:" will default to phpunit
+# use the $DB env variable to determine the phpunit.xml to use
+script: phpunit --configuration phpunit.xml.dist
