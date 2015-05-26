@@ -16,7 +16,7 @@ $title = '  _____ __    ___    ____ ______  __ ____ ____ __    ____
 \___//____//_/ |_|/___//___/   /_//_/  /___//____//___/  ';
 
 
-$application = new Symfony\Component\Console\Application($title, '1.0.0-DEV');
+$application = new Symfony\Component\Console\Application($title, '0.2.0');
 $application->addCommands([
     new \Onema\ClassyFile\Command\GenerateClassesFromFileCommand(),
 ]);
