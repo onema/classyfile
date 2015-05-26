@@ -13,10 +13,6 @@ before_install:
 before_script:
  - wget http://getcomposer.org/composer.phar
  - php composer.phar install --dev --no-interaction
- # General cleanup before starting test
- - rm -rf /tmp/Service/
- - rm -rf /tmp/VendorName/
-
 
 script:
  - mkdir -p build/logs
