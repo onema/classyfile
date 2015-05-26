@@ -16,6 +16,7 @@ use PhpParser\Parser;
  *
  * @author Juan Manuel Torres <kinojman@gmail.com>
  * @copyright (c) 2015, onema
+ * @group constants
  */
 class ConstantNamesToUpperTest extends \PHPUnit_Framework_TestCase
 {

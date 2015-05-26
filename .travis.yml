@@ -3,7 +3,6 @@ language: php
 
 # list any PHP version you want to test against
 php:
-  - 5.4
   - 5.5
   - 5.6
 
@@ -12,7 +11,16 @@ before_install:
 
 # execute any number of scripts before the test run, custom env's are available as variables
 before_script:
-  - composer install --no-interaction
+ - wget http://getcomposer.org/composer.phar
+ - php composer.phar install --dev --no-interaction
+
+script:
+ - mkdir -p build/logs
+ - phpunit --coverage-clover build/logs/clover.xml
+
+after_script:
+ - php vendor/bin/coveralls -v
+
 
 # whitelist
 branches:

@@ -79,17 +79,21 @@ class ClassyFileTest extends \PHPUnit_Framework_TestCase
         $dispatcher = new EventDispatcher();
         $classyfile->setEventDispatcher($dispatcher);
 
-        $codeLocation = __DIR__.'/mock/src/Vendor/Api/Category/ProductName/v123456/';
+        $codeLocation = __DIR__.'/mock/src/VendorName/ProjectName/Category/ProductName/v123456/';
+        $codeLocationArray = explode('/', $codeLocation);
+        $codeLocationArray = array_splice($codeLocationArray, 6, 4);
+        $directory = $codeLocationArray[0];
+        $destinationLocation = implode('/', $codeLocationArray);
         $codeDestination = '/tmp/';
         $classyfile->generateClassFiles($codeDestination, $codeLocation, true, 6, 4);
 
-        $this->assertFileExists('/tmp/Vendor/Api/Category/ProductName/Date.php');
-        $this->assertFileExists('/tmp/Vendor/Api/Category/ProductName/DateRange.php');
-        $this->assertFileExists('/tmp/Vendor/Api/Category/ProductName/OrderBy.php');
+        $this->assertFileExists(sprintf('/%s/%s/Date.php', $codeDestination, $destinationLocation));
+        $this->assertFileExists(sprintf('/%s/%s/DateRange.php', $codeDestination, $destinationLocation));
+        $this->assertFileExists(sprintf('/%s/%s/OrderBy.php', $codeDestination, $destinationLocation));
 
         // Delete all files/
         $filesystem = new Filesystem(new Local($codeDestination));
-        $filesystem->deleteDir('/Vendor/');
+        $filesystem->deleteDir(sprintf('/%s/', $directory));
     }
 
     public function testClassToFileConversionStyle2NoNamespaces()
@@ -99,7 +103,7 @@ class ClassyFileTest extends \PHPUnit_Framework_TestCase
         $dispatcher = new EventDispatcher();
         $classyfile->setEventDispatcher($dispatcher);
 
-        $codeLocation = __DIR__.'/mock/src/Vendor/Api/Category/ProductName/v123456/';
+        $codeLocation = __DIR__.'/mock/src/VendorName/ProjectName/Category/ProductName/v123456/';
         $codeDestination = '/tmp/';
         $classyfile->generateClassFiles($codeDestination, $codeLocation);
 
