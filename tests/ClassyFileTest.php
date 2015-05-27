@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Onema {test} Package.
+ * This file is part of the Onema ClassyFile Package.
  * For the full copyright and license information, 
  * please view the LICENSE file that was distributed 
  * with this source code.
@@ -23,6 +23,9 @@ class ClassyFileTest extends \PHPUnit_Framework_TestCase
 {
     public function testClassToFileConversionStyle1()
     {
+        // Delete all files
+        $this->deleteFiles('/tmp/', '/Service/');
+
         $classyfile = new ClassyFile();
         $dispatcher = new EventDispatcher();
         $classyfile->setEventDispatcher($dispatcher);
@@ -36,9 +39,8 @@ class ClassyFileTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists('/tmp/Service/WithBad/ClassFiles/TimeInterval.php', 'File was not created in the right location.');
         $this->assertEquals($dispatcher, $classyfile->getEventDispatcher());
 
-        // Delete all files/
-        $filesystem = new Filesystem(new Local($codeDestination));
-        $filesystem->deleteDir('/Service/');
+        // Delete all files
+        $this->deleteFiles($codeDestination, '/Service/');
     }
 
     public function testClassToFileConversionMocked()
@@ -85,19 +87,25 @@ class ClassyFileTest extends \PHPUnit_Framework_TestCase
         $directory = $codeLocationArray[0];
         $destinationLocation = implode('/', $codeLocationArray);
         $codeDestination = '/tmp/';
-        $classyfile->generateClassFiles($codeDestination, $codeLocation, true, 6, 4);
+
+        // Delete all files/
+        $this->deleteFiles($codeDestination, sprintf('/%s/', $directory));
+
+        $classyfile->generateClassFiles($codeDestination, $codeLocation, 6, 4);
 
         $this->assertFileExists(sprintf('/%s/%s/Date.php', $codeDestination, $destinationLocation));
         $this->assertFileExists(sprintf('/%s/%s/DateRange.php', $codeDestination, $destinationLocation));
         $this->assertFileExists(sprintf('/%s/%s/OrderBy.php', $codeDestination, $destinationLocation));
 
         // Delete all files/
-        $filesystem = new Filesystem(new Local($codeDestination));
-        $filesystem->deleteDir(sprintf('/%s/', $directory));
+        $this->deleteFiles($codeDestination, sprintf('/%s/', $directory));
     }
 
     public function testClassToFileConversionStyle2NoNamespaces()
     {
+        // Delete all files/
+        $this->deleteFiles('/tmp/', '/tmp/');
+
         $classyfile = new ClassyFile();
 
         $dispatcher = new EventDispatcher();
@@ -112,20 +120,9 @@ class ClassyFileTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists('/tmp/tmp/OrderBy.php');
 
         // Delete all files/
-        $filesystem = new Filesystem(new Local($codeDestination));
-        $filesystem->deleteDir('/tmp/');
+        $this->deleteFiles($codeDestination, '/tmp/');
     }
 
-    public function testClassToFileConversionMissingEventDispatcherException()
-    {
-        $this->setExpectedException('\Onema\ClassyFile\Exception\MissingEventDispatcherException', 'This operation requires an instance of "Symfony\Component\EventDispatcher\EventDispatcherInterface".');
-        $classyfile = new ClassyFile();
-
-        $codeLocation = __DIR__.'/mock/';
-        $codeDestination = '/tmp/';
-        $classyfile->generateClassFiles($codeDestination, $codeLocation);
-    }
-    
     public function testNewTemplate()
     {
         $codeLocation = __DIR__.'/mock/';
@@ -156,5 +153,12 @@ class ClassyFileTest extends \PHPUnit_Framework_TestCase
 
         $codeLocation = __DIR__.'/mock/bad/';
         $classyfile->generateClasses($codeLocation);
+    }
+
+    private function deleteFiles($codeDestination, $directory)
+    {
+        // Delete all files/
+        $filesystem = new Filesystem(new Local($codeDestination));
+        $filesystem->deleteDir($directory);
     }
 }
