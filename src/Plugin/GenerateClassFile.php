@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Onema {test} Package. 
+ * This file is part of the Onema ClassyFile Package.
  * For the full copyright and license information, 
  * please view the LICENSE file that was distributed 
  * with this source code.
@@ -8,7 +8,8 @@
 namespace Onema\ClassyFile\Plugin;
 
 use League\Flysystem\FilesystemInterface;
-use Onema\ClassyFile\ClassyFileEvent;
+use Onema\ClassyFile\Event\ClassyFileEvent;
+use Onema\ClassyFile\Event\GetClassEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 
@@ -41,13 +42,13 @@ class GenerateClassFile implements EventSubscriberInterface
     /**
      * Use flysystem to save the file in the desired location.
      *
-     * @param ClassyFileEvent $event
+     * @param \Onema\ClassyFile\Event\GetClassEvent $event
      */
-    public function onGetClassGenerateFile(ClassyFileEvent $event)
+    public function onGetClassGenerateFile(GetClassEvent $event)
     {
-        $statement = $event->getStatement();
-        $fileLocation = $event->getArgument('file_location');
-        $code = $event->getArgument('code');
+        $statement = $event->getStatements();
+        $fileLocation = $event->getFileLocation();
+        $code = $event->getCode();
         $name = $statement->name;
 
         if (!$this->filesystem->has($fileLocation)) {
