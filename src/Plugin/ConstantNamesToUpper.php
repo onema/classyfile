@@ -1,13 +1,13 @@
 <?php
 /*
- * This file is part of the Onema {test} Package. 
+ * This file is part of the Onema ClassyFile Package.
  * For the full copyright and license information, 
  * please view the LICENSE file that was distributed 
  * with this source code.
  */
 namespace Onema\ClassyFile\Plugin;
 
-use Onema\ClassyFile\ClassyFileEvent;
+use Onema\ClassyFile\Event\ClassyFileEvent;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -40,7 +40,7 @@ class ConstantNamesToUpper implements EventSubscriberInterface
      */
     public function onSetClassUpdateConstants(ClassyFileEvent $event)
     {
-        $statements = $event->getStatement();
+        $statements = $event->getStatements();
         if ($statements instanceof Class_) {
             $count = count($statements->stmts);
             for ($i = 0; $i < $count; $i++) {
@@ -52,7 +52,7 @@ class ConstantNamesToUpper implements EventSubscriberInterface
             }
         }
 
-        $event->setStatement($statements);
+        $event->setStatements($statements);
     }
 
     private function toUpper($statement)

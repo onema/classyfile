@@ -10,7 +10,10 @@ namespace Onema\ClassyFile;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Filesystem;
-use Onema\ClassyFile\Exception\MissingEventDispatcherException;
+use Onema\ClassyFile\Event\ClassyFileEvent;
+use Onema\ClassyFile\Event\GetClassEvent;
+use Onema\ClassyFile\Event\TraverseEvent;
+use Onema\ClassyFile\Plugin\CreateNamespace;
 use Onema\ClassyFile\Plugin\GenerateClassFile;
 use Onema\ClassyFile\Exception\ClassToFileRuntimeException;
 use PhpParser\Error;
@@ -52,8 +55,14 @@ class ClassyFile
      */
     private $template;
 
-    public function __construct()
+    public function __construct(EventDispatcherInterface $dispatcher = null)
     {
+        if (!isset($dispatcher)) {
+            $this->dispatcher = new EventDispatcher();
+        } else {
+            $this->dispatcher = $dispatcher;
+        }
+
         $this->prettyPrinter = new Standard();
         $this->setTemplate(function ($namespace, $uses, $comments, $code) {
             return '<?php'.
@@ -99,68 +108,51 @@ class ClassyFile
      *
      * @param $codeDestination
      * @param $codeLocation
-     * @param bool $createNamespace
      * @param int $offset
      * @param int $length
      */
-    public function generateClassFiles($codeDestination, $codeLocation, $createNamespace = false, $offset = 0, $length = 1)
+    public function generateClassFiles($codeDestination, $codeLocation, $offset = 0, $length = 0)
     {
-        if (!isset($this->dispatcher)) {
-            throw new MissingEventDispatcherException('This operation requires an instance of "Symfony\Component\EventDispatcher\EventDispatcherInterface".');
-        }
-
         // add default local file system adapter.
         if (!isset($this->filesystemAdapter)) {
             $this->filesystemAdapter = new Local($codeDestination);
         }
 
+        if ($length !== 0) {
+            $this->dispatcher->addSubscriber(new CreateNamespace($offset, $length));
+        }
+
         $filesystem = new Filesystem($this->filesystemAdapter);
         $this->dispatcher->addSubscriber(new GenerateClassFile($filesystem));
-        $this->generateClasses($codeLocation, $createNamespace, $offset, $length);
+        $this->generateClasses($codeLocation);
     }
 
     /**
      * @param $directoryPath
-     * @param bool $createNamespace
-     * @param int $offset
-     * @param int $length
      * @returns array $code
      */
-    public function generateClasses($directoryPath, $createNamespace = false, $offset = 0, $length = 1)
+    public function generateClasses($directoryPath)
     {
         // Get all the files in the given directory
         $files = array_diff(scandir($directoryPath), array('..', '.'));
         $parser = new Parser(new Lexer());
         $code = [];
+        $namespace = '';
 
         foreach ($files as $file) {
             $classes = file_get_contents(sprintf('%s/%s', $directoryPath, $file));
             $parts = pathinfo($file);
+
             if (isset($parts['extension']) && $parts['extension'] === 'php') {
                 try {
 
                     $statements = $parser->parse($classes);
 
-                    if (!empty($createNamespace)) {
-                        $namespaceArray = explode(DIRECTORY_SEPARATOR, $directoryPath);
-                        $arraySlice = array_slice($namespaceArray, $offset, $length);
-                        $namespace = implode('\\', $arraySlice);
-                    } else {
-                        $namespace = '';
-                    }
-
-                    if ($this->dispatcher) {
-                        $event = $this->dispatch(ClassyFileEvent::TRAVERSE, [
-                            'statements' => $statements,
-                            'create_namespace' => $createNamespace,
-                            'offset' => $offset,
-                            'length' => $length
-                        ]);
-                        $statements = $event->getArgument('statements');
-                        $createNamespace = $event->getArgument('create_namespace');
-                        $offset = $event->getArgument('offset');
-                        $length = $event->getArgument('length');
-                    }
+                    $event = new TraverseEvent($statements, $namespace, $directoryPath, $file);
+                    $this->dispatcher->dispatch(ClassyFileEvent::TRAVERSE, $event);
+                    $statements = $event->getStatements();
+                    $namespace = $event->getNamespace();
+                    $file = $event->getFile();
 
                     $code[$file] = $this->traverseStatements($statements, $namespace);
 
@@ -232,17 +224,11 @@ class ClassyFile
             $namespace = 'namespace '.$namespace.';';
         }
 
-        if ($this->dispatcher) {
-            $event = $this->dispatch(ClassyFileEvent::GET_CLASS, [
-                'statement' => $statement,
-                'namespace' => $namespace,
-                'file_location' => $fileLocation,
-                'uses' => $uses
-            ]);
-            $namespace = $event->getArgument('namespace');
-            $uses = $event->getArgument('uses');
-            $statement = $event->getStatement();
-        }
+        $event = new GetClassEvent($statement, $fileLocation, $namespace, $uses);
+        $this->dispatcher->dispatch(ClassyFileEvent::GET_CLASS, $event);
+        $namespace = $event->getNamespace();
+        $uses = $event->getUses();
+        $statement = $event->getStatements();
 
         $code = $this->prettyPrinter->pStmt_Class($statement);
 
@@ -250,23 +236,11 @@ class ClassyFile
             $code = call_user_func($this->template, $namespace, $uses, $comments, $code);
         }
 
-        if ($this->dispatcher) {
-            $event = $this->dispatch(ClassyFileEvent::AFTER_GET_CLASS, [
-                'code' => $code,
-                'statement' => $statement,
-                'file_location' => $fileLocation,
-            ]);
-            $code = $event->getArgument('code');
-        }
+        $event->setCode($code);
+        $this->dispatcher->dispatch(ClassyFileEvent::AFTER_GET_CLASS, $event);
+        $code = $event->getCode();
 
         return $code;
-    }
-
-    protected function dispatch($eventName, array $arguments = [])
-    {
-        $event = new ClassyFileEvent(null, $arguments);
-        $this->dispatcher->dispatch($eventName, $event);
-        return $event;
     }
 
     /**

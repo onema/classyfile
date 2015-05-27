@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Onema {test} Package.
+ * This file is part of the Onema ClassyFile Package.
  * For the full copyright and license information, 
  * please view the LICENSE file that was distributed 
  * with this source code.
@@ -8,7 +8,8 @@
 namespace Onema\Test;
 
 use League\Flysystem\Filesystem;
-use Onema\ClassyFile\ClassyFileEvent;
+use Onema\ClassyFile\Event\ClassyFileEvent;
+use Onema\ClassyFile\Event\GetClassEvent;
 use Onema\ClassyFile\Plugin\GenerateClassFile;
 use PhpParser\Node\Stmt\Class_;
 
@@ -42,14 +43,19 @@ class GenerateClassFileTest extends \PHPUnit_Framework_TestCase
             ->method('write')
             ->willReturn(true);
 
-        $event = new ClassyFileEvent();
-        $event['code'] = 'some code';
-        $event['file_location'] = '/tmp/';
         $statement = new Class_('some_name');
-        $event->setStatement($statement);
+        $event = new GetClassEvent($statement);
+        $event->setFileLocation('/tmp/');
+        $event->setCode('some code');
 
         $plugin = new GenerateClassFile(new Filesystem($mockAdapter));
 
         $plugin->onGetClassGenerateFile($event);
+    }
+
+    public function testSubscribedEvents()
+    {
+        $subscribedEvents = GenerateClassFile::getSubscribedEvents();
+        $this->assertArrayHasKey(ClassyFileEvent::AFTER_GET_CLASS, $subscribedEvents, 'The subscriber is not returning a valid event.');
     }
 }
