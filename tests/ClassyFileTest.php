@@ -26,9 +26,8 @@ class ClassyFileTest extends \PHPUnit_Framework_TestCase
         // Delete all files
         $this->deleteFiles('/tmp/', '/Service/');
 
-        $classyfile = new ClassyFile();
         $dispatcher = new EventDispatcher();
-        $classyfile->setEventDispatcher($dispatcher);
+        $classyfile = new ClassyFile($dispatcher);
 
         $codeLocation = __DIR__.'/mock/';
         $codeDestination = '/tmp/';

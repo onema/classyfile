@@ -27,7 +27,9 @@ class ConstantNamesToUpperTest extends \PHPUnit_Framework_TestCase
         $class = file_get_contents(__DIR__.'/mock/constants/class_with_constants.php');
         $statement = $parser->parse($class);
         $event = new GetClassEvent($statement[0], '/tmp/');
-        $event->setCode('some code');
+        $event->setCode('<?php echo "some code";');
+        $event->setUses('use Some\Namespace;');
+        $event->setNamespace('namespace Current\Namespace;');
 
         $plugin = new ConstantNamesToUpper();
         $plugin->onSetClassUpdateConstants($event);
