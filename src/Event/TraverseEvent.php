@@ -7,8 +7,6 @@
  */
 namespace Onema\ClassyFile\Event;
 
-use PhpParser\Node\Stmt;
-
 /**
  * GetClassEvent - Description. 
  *
