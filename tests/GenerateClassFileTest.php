@@ -46,7 +46,7 @@ class GenerateClassFileTest extends \PHPUnit_Framework_TestCase
         $statement = new Class_('some_name');
         $event = new GetClassEvent($statement);
         $event->setFileLocation('/tmp/');
-        $event->setCode('some code');
+        $event->setCode('<?php echo "some code";');
 
         $plugin = new GenerateClassFile(new Filesystem($mockAdapter));
 

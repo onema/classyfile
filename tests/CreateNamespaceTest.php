@@ -27,6 +27,13 @@ class CreateNamespaceTest extends \PHPUnit_Framework_TestCase
         $namespace = $event->getNamespace();
 
         $this->assertEquals('Vendor\Product', $namespace);
+
+        $event->setDirectoryPath('/lala/foo/bar/poz/');
+        $event->setFile('FooBar.php');
+        $plugin->onTraverseAddNamespace($event);
+        $namespace = $event->getNamespace();
+
+        $this->assertEquals('foo\bar', $namespace);
     }
 
     public function testSubscribedEvents()
