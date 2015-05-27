@@ -1,145 +1,40 @@
-# classyfile 
+classyfile
+==========
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/7cd81039-46d2-4a18-b57b-6242cb18f3b4/mini.png)](https://insight.sensiolabs.com/projects/7cd81039-46d2-4a18-b57b-6242cb18f3b4)
 [![Code Climate](https://codeclimate.com/github/onema/classyfile/badges/gpa.svg)](https://codeclimate.com/github/onema/classyfile)
 [![Build Status](https://travis-ci.org/onema/classyfile.svg?branch=develop)](https://travis-ci.org/onema/classyfile) [![Coverage Status](https://coveralls.io/repos/onema/classyfile/badge.svg?branch=develop)](https://coveralls.io/r/onema/classyfile?branch=develop) 
 [![Documentation Status](https://readthedocs.org/projects/classyfile/badge/?version=latest)](https://readthedocs.org/projects/classyfile/?badge=latest)
 [![MIT License](https://img.shields.io/packagist/l/onema/classyfile.svg?style=flat)](https://tldrlegal.com/license/mit-license)
 
-
+## Summary
 Provides a way to break PHP files containing multiple classes and creates single files per class.
 This can be useful when refactoring old libraries. 
 
-This library uses the [nikic/PHP-Parser](https://github.com/nikic/PHP-Parser).
+This library uses the [nikic/PHP-Parser](https://github.com/nikic/PHP-Parser) to parse all the php classes.
 
-## Usage
+See the [Documentation](http://classyfile.readthedocs.org/en/latest/) for more information. 
 
-Using the `ClassyFile` class:
+## Requirements
+  - PHP 5.5.0
+## Installation
+### Install it using composer 
 
-```php 
-<?php
-include 'vendor/autoload.php';
-
-$classifile = new \Onema\ClassyFile\ClassyFile();
-
-$codeLocation = 'path/to/directory/with/PHP/Files/';
-$code = $classyfile->generateClasses($codeLocation)
-var_dump($code);
-```
-The code returned by the `generateClasses` method is a nested file containing the following information (you can see the sample class [here](tests/mock/mock_classes_style1.php) ):
-```
-array(1) {
-  'mock_classes_style1.php' =>
-  array(3) {
-    'ServiceSettings' =>
-    string(243) "<?php\n\nnamespace Service\\WithBad\\ClassFiles;\nuse DateTime;\n\n\nfinal class ServiceSettings\n{\n    const ServiceNamespace = \'https://some.endpoint.com/Api/v1\';\n    const ProductionEndpoint = \'https://some.endpoint.com/Api/v1/UnIntelligent.svc\';\n}\n"
-    'TimeInterval' =>
-    string(358) "<?php\n\nnamespace Service\\WithBad\\ClassFiles;\nuse DateTime;\n\n/** comment */\nfinal class TimeInterval\n{\n    /** Use data from the previous calendar month. */\n    const Last30Days = \'Last30Days\';\n    /** Use data from last week, Sunday through Saturday. */\n    const Last7Days = \'Last7Days\';\n    /** Use data from yesterday. */\n    const LastDay = \'LastDay\';\n}\n"
-    'Scale' =>
-    string(334) "<?php\n\nnamespace Service\\WithBad\\ClassFiles;\nuse DateTime;\n\n/**\n     * Defines something.\n     *\n     * @link http://some.documentation.com TimeInterval Value Set\n     */\nfinal class Scale\n{\n    const Minimal = \'Minimal\';\n    const Low = \'Low\';\n    const Medium = \'Medium\';\n    const High = \'High\';\n    const VeryHigh = \'VeryHigh\';\n}\n"
-  }
+```json
+{
+    "require": {
+        "onema/classyfile": "^0.3.0@dev"
+    },
+    "minimum-stability": "dev"
 }
 ```
 
-The returned array follows this structure:
+After it has been installed you can run the command: `php vendor/bin/classyfile`
+
+### Download from github
+You can download the project from github. You still need to use composer to install all the dependencies.
 ```
-[
-  'original_file_name1.php' => [
-    'ClassName1' [code],
-    'ClassName2' [code],
-    '...'
-  ],
-  'original_file_name2.php' => [
-    '...'
-  ],
-]
+git clone git@github.com:onema/classyfile.git
+cd classyfile
+composer install
 ```
-
-Each class can be saved into it's own file by using the method `generateClassFiles` and passing a code destination location and a code origin location. This method will not return the `code` array.
-
-```php 
-<?php
-include 'vendor/autoload.php';
-
-$classifile = new \Onema\ClassyFile\ClassyFile();
-
-$codeLocation = 'path/to/directory/with/PHP/Files/';
-$codeDestination = '/tmp/';
-$classifile->generateClassFiles($codeDestination, $codeLocation);
-
-```
-
-Files will be created under a directory structure following the classes namespace in the `$codeDestination` directory.
-
-If the classes in the files do not contain a namespace you can choose to create it based on a section of the `$filePath`, e.g.
-
-```php
-$filePath = 'vendor-lib/src/VendorName/Api/Lib/';
-$classifile->generateClassFiles($codeDestination, $filePath, true, 2, 3);
-```
-
-This will generate all classes with the `namespace VendorName\Api\Lib;` and will be saved under the `VendorName/Api/Lib/` directory.
-
-### Command
-A command is provided to enable you to quickly convert files
-```sh
-$ php classyfile convert vendor-lib/src/VendorName/Api/Lib/ --create-namespace --offset=2 --length=3
-```
-
-The `--code-destinatio` option can be used to set where the files will be saved, the Current Working Directory is used by default. 
-
-As of `v0.2.0` a new option was added that can covert constant names to uppercase (declaration only). Use the option `--constants-to-upper`
-
-##Template
-As of `v0.2.0` a template callable can be set. This is a simple callable that can be used to generate the final ouput of the code and it takes four parameters:
- - namespace
- - use statement
- - comments
- - code
-
-The default template generates a simple class. You can create your own callables to create custom classes
-```
-$customComment = '/** Generated by My Name, name@domain.com */';
-$customFunction = function ($namespace, $uses, $comments, $code) use ($customComment){
-    return '<?php'.
-    PHP_EOL.
-    $customComment . 
-    PHP_EOL.
-    $namespace .
-    PHP_EOL.
-    $uses.
-    PHP_EOL.
-    $comments.
-    PHP_EOL.
-    $code.
-    PHP_EOL;};
-    
-$classyfile->setTemplate($customFunction);
- ```
-
-## Events
-`ClassyFile` emits two events to allow you to extend the basic functionality of this library.
-
-### classyfile.traverse
-This event is emitted after the file has been opened and parsed. The event will contain the following values:
-
-- 'statements': an array containing all the statements in the file.
-- 'create_namespace': boolean value with selected option to create name spaces.
-- 'offset': path offset used to generate the namespace.
-- 'length': used to determine how many sections of the path to use starting at the given offset.
-
-All values can be modified by the listeners.
-
-### classyfile.get_class
-This event is emitted before the new class is generated and saved. This allow us to make modifications to the generated class. The event will contain the following values:
-
-- Class statement (subject): `Class_` statement. This can be retrieved from the event like such: `$event->getStatement()`.
-- 'namespace': string containing the current namespace. Empty if no namespace was set.
-- 'file_location': place where the new class will be saved.
-- 'uses': any use statements to be added to the class.
-
-### classyfile.after_get_class
-This event is emitted after the new class is generated. This allow us to make modifications to the class after it has been added to the tempalte. This is where the plugin to save the classes to a files system get's triggered. The event will contain the following values:
-
-- Class statement (subject): `Class_` statement. This can be retrieved from the event like such: `$event->getStatement()`.
-- 'code': the generated code
-- 'file_location': place where the new class will be saved.
+After it has been installed you can run the command: `php classyfile`
