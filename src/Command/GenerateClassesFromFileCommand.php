@@ -86,6 +86,6 @@ class GenerateClassesFromFileCommand extends Command
         }
 
         $classyfile->setEventDispatcher($dispatcher);
-        $classyfile->generateClassFiles($codeDestination, $codeLocation, $createNamespace, $offset, $length);
+        $classyfile->generateClassFiles($codeDestination, $codeLocation, $offset, $length);
     }
 }
