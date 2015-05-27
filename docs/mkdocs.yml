@@ -1,0 +1,6 @@
+site_name: ClassyFile
+pages:
+- Home: index.md
+- Usage: usage.md
+- Template: template.md
+- Events: events.md
