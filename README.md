@@ -1,5 +1,6 @@
 # classyfile 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/7cd81039-46d2-4a18-b57b-6242cb18f3b4/mini.png)](https://insight.sensiolabs.com/projects/7cd81039-46d2-4a18-b57b-6242cb18f3b4) 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/7cd81039-46d2-4a18-b57b-6242cb18f3b4/mini.png)](https://insight.sensiolabs.com/projects/7cd81039-46d2-4a18-b57b-6242cb18f3b4)
+[![Code Climate](https://codeclimate.com/github/onema/classyfile/badges/gpa.svg)](https://codeclimate.com/github/onema/classyfile)
 [![Build Status](https://travis-ci.org/onema/classyfile.svg?branch=develop)](https://travis-ci.org/onema/classyfile) [![Coverage Status](https://coveralls.io/repos/onema/classyfile/badge.svg?branch=develop)](https://coveralls.io/r/onema/classyfile?branch=develop) 
 [![Documentation Status](https://readthedocs.org/projects/classyfile/badge/?version=latest)](https://readthedocs.org/projects/classyfile/?badge=latest)
 [![MIT License](https://img.shields.io/packagist/l/onema/classyfile.svg?style=flat)](https://tldrlegal.com/license/mit-license)
