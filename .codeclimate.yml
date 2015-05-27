@@ -1,0 +1,10 @@
+languages:
+  Ruby: false
+  JavaScript: false
+  PHP: true
+  Python: false
+exclude_paths:
+- "tests/mock/mock_classes_style1.php"
+- "tests/mock/bad/bad_php_file.php"
+- "tests/mock/mock_with_constants.php"
+- "tests/mock/src/VendorName/ProjectName/Category/ProductName/v123456/mock_classes_style2.php"
