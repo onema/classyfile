@@ -106,6 +106,4 @@ class GetClassEvent extends ClassyFileEvent
     {
         $this->fileLocation = $fileLocation;
     }
-
-
 }
