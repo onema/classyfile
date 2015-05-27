@@ -118,8 +118,7 @@ class ClassyFile
             $this->filesystemAdapter = new Local($codeDestination);
         }
 
-        // add the create namespace plugin if both offset and length are set
-        if ($offset && $length ) {
+        if ($length !== 0) {
             $this->dispatcher->addSubscriber(new CreateNamespace($offset, $length));
         }
 
