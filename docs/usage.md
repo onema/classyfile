@@ -6,7 +6,7 @@ A command is provided to enable you to quickly convert files:
 $ php classyfile convert vendor-lib/src/VendorName/Api/Lib/ --create-namespace --offset=2 --length=3
 ```
 
-The `--code-destinatio` option can be used to set where the files will be saved, the Current Working Directory is used by default. 
+The `--code-destination` option can be used to set where the files will be saved, the Current Working Directory is used by default. 
 
 As of `v0.2.0` a new option was added that can covert constant names to uppercase (declaration only). Use the option `--constants-to-upper`
 

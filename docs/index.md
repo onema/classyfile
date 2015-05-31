@@ -25,7 +25,7 @@ This library uses the [nikic/PHP-Parser](https://github.com/nikic/PHP-Parser) to
 After it has been installed you can run the command: `php vendor/bin/classyfile`
 
 ### Download from github
-You can download the project from github. You still need to use composer to install all the dependencies.
+You can download the project from [github](https://github.com/onema/classyfile). You still need to use composer to install all the dependencies.
 ```
 git clone git@github.com:onema/classyfile.git
 cd classyfile
