@@ -4,3 +4,4 @@ pages:
 - [usage.md, Usage]
 - [template.md, Template]
 - [events.md, Events]
+theme: readthedocs
