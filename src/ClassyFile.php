@@ -26,6 +26,8 @@ use PhpParser\Parser;
 use PhpParser\PrettyPrinter\Standard;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * ClassyFile - Description.
@@ -134,27 +136,27 @@ class ClassyFile
     public function generateClasses($directoryPath)
     {
         // Get all the files in the given directory
-        $files = array_diff(scandir($directoryPath), array('..', '.'));
+        $finder = new Finder();
+        $finder->depth('== 0')->files()->in(rtrim($directoryPath, '/'))->name('*.php');
         $parser = new Parser(new Lexer());
         $code = [];
         $namespace = '';
 
-        foreach ($files as $file) {
-            $classes = file_get_contents(sprintf('%s/%s', $directoryPath, $file));
-            $parts = pathinfo($file);
+        foreach ($finder as $file) {
+            if ($file instanceof SplFileInfo) {
 
-            if (isset($parts['extension']) && $parts['extension'] === 'php') {
+                $classes = $file->getContents();
+
                 try {
-
                     $statements = $parser->parse($classes);
 
-                    $event = new TraverseEvent($statements, $namespace, $directoryPath, $file);
+                    $event = new TraverseEvent($statements, $namespace, $directoryPath, $file->getFilename());
                     $this->dispatcher->dispatch(ClassyFileEvent::TRAVERSE, $event);
                     $statements = $event->getStatements();
                     $namespace = $event->getNamespace();
-                    $file = $event->getFile();
+                    $filename = $event->getFile();
 
-                    $code[$file] = $this->traverseStatements($statements, $namespace);
+                    $code[$filename] = $this->traverseStatements($statements, $namespace);
 
                 } catch (Error $e) {
                     throw new ClassToFileRuntimeException(sprintf('Parse Error: %s', $e->getMessage()));
