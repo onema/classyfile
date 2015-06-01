@@ -27,7 +27,6 @@ use PhpParser\PrettyPrinter\Standard;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * ClassyFile - Description.
@@ -142,25 +141,25 @@ class ClassyFile
         $code = [];
         $namespace = '';
 
+        /**
+         * @var $finder \Symfony\Component\Finder\SplFileInfo[]
+         */
         foreach ($finder as $file) {
-            if ($file instanceof SplFileInfo) {
+            $classes = $file->getContents();
 
-                $classes = $file->getContents();
+            try {
+                $statements = $parser->parse($classes);
 
-                try {
-                    $statements = $parser->parse($classes);
+                $event = new TraverseEvent($statements, $namespace, $directoryPath, $file->getFilename());
+                $this->dispatcher->dispatch(ClassyFileEvent::TRAVERSE, $event);
+                $statements = $event->getStatements();
+                $namespace = $event->getNamespace();
+                $filename = $event->getFile();
 
-                    $event = new TraverseEvent($statements, $namespace, $directoryPath, $file->getFilename());
-                    $this->dispatcher->dispatch(ClassyFileEvent::TRAVERSE, $event);
-                    $statements = $event->getStatements();
-                    $namespace = $event->getNamespace();
-                    $filename = $event->getFile();
+                $code[$filename] = $this->traverseStatements($statements, $namespace);
 
-                    $code[$filename] = $this->traverseStatements($statements, $namespace);
-
-                } catch (Error $e) {
-                    throw new ClassToFileRuntimeException(sprintf('Parse Error: %s', $e->getMessage()));
-                }
+            } catch (Error $e) {
+                throw new ClassToFileRuntimeException(sprintf('Parse Error: %s', $e->getMessage()));
             }
         }
 
