@@ -57,6 +57,6 @@ class GenerateClassFile implements EventSubscriberInterface
         }
 
         $location = sprintf('%s/%s.php', $fileLocation, $name);
-        $this->filesystem->write($location, $code);
+        $this->filesystem->put($location, $code);
     }
 }
