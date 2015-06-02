@@ -16,7 +16,7 @@ This library uses the [nikic/PHP-Parser](https://github.com/nikic/PHP-Parser) to
 ```json
 {
     "require": {
-        "onema/classyfile": "^0.3.0@dev"
+        "onema/classyfile": "^0.5.0@dev"
     },
     "minimum-stability": "dev"
 }
