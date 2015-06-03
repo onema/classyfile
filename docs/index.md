@@ -7,7 +7,7 @@ This can be useful when refactoring old libraries.
 This library uses the [nikic/PHP-Parser](https://github.com/nikic/PHP-Parser) to parse all the php classes.
 
 ## Requirements
-  - PHP 5.5.0
+  - PHP 5.4.0
   
 ## Installation
 
@@ -16,9 +16,8 @@ This library uses the [nikic/PHP-Parser](https://github.com/nikic/PHP-Parser) to
 ```json
 {
     "require": {
-        "onema/classyfile": "^0.5.0@dev"
-    },
-    "minimum-stability": "dev"
+        "onema/classyfile": "^1.0.0"
+    }
 }
 ```
 
