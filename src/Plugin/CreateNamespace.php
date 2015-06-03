@@ -41,7 +41,7 @@ class CreateNamespace implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return [ClassyFileEvent::TRAVERSE => 'onTraverseAddNamespace'];
+        return [ClassyFileEvent::TRAVERSE => ['onTraverseAddNamespace', 0]];
     }
 
     public function onTraverseAddNamespace(TraverseEvent $event)
