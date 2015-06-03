@@ -46,20 +46,35 @@ class ClassyFileTest extends \PHPUnit_Framework_TestCase
     {
         $mockAdapter = $this->getMockBuilder('\League\Flysystem\Adapter\Local')
             ->disableOriginalConstructor()
-            ->setMethods(['has', 'createDir', 'write'])
+            ->setMethods(['has', 'createDir', 'update', 'write'])
             ->getMock();
 
-        // plugin calls this method 3 times, internally write calls this method each time checking if
-        // the file exist. write has must always return false otherwise it will throw an exception.
-        $mockAdapter->expects($this->exactly(6))
+        // plugin calls this method 3 times, internally put calls this method each time checking if
+        // the file exist.
+
+        $mockAdapter->expects($this->exactly(9))
             ->method('has')
-            ->will($this->onConsecutiveCalls(false, false, true, false, true, false));
+            ->will($this->onConsecutiveCalls(
+                false, // create dir
+                false, // put file -> write
+                false, // write file
+                true, // create dir
+                true, // put file -> update
+                true, // update file
+                true, // create dir
+                true, // put file -> update
+                true // update file
+            ));
 
         $mockAdapter->expects($this->once())
             ->method('createDir')
             ->willReturn(true);
 
-        $mockAdapter->expects($this->exactly(3))
+        $mockAdapter->expects($this->exactly(2))
+            ->method('update')
+            ->willReturn(true);
+
+        $mockAdapter->expects($this->once())
             ->method('write')
             ->willReturn(true);
 

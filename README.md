@@ -22,7 +22,7 @@ See the [Documentation](http://classyfile.readthedocs.org/en/latest/) for more i
 ```json
 {
     "require": {
-        "onema/classyfile": "^0.3.0@dev"
+        "onema/classyfile": "^0.5.0@dev"
     },
     "minimum-stability": "dev"
 }
