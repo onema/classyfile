@@ -36,7 +36,7 @@ class GenerateClassFile implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return [ClassyFileEvent::AFTER_GET_CLASS => 'onGetClassGenerateFile'];
+        return [ClassyFileEvent::AFTER_GET_CLASS => ['onGetClassGenerateFile', 10]];
     }
 
     /**
@@ -58,5 +58,6 @@ class GenerateClassFile implements EventSubscriberInterface
 
         $location = sprintf('%s/%s.php', $fileLocation, $name);
         $this->filesystem->put($location, $code);
+        $event->setFileLocation($location);
     }
 }
