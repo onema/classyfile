@@ -15,6 +15,7 @@ use Onema\ClassyFile\Plugin\CreateNamespace;
  *
  * @author Juan Manuel Torres <kinojman@gmail.com>
  * @copyright (c) 2015, Onema
+ * @group namespace
  */
 class CreateNamespaceTest extends \PHPUnit_Framework_TestCase
 {
