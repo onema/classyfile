@@ -12,7 +12,9 @@ use Onema\ClassyFile\Event\TraverseEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * CreateNamespacePlugin - Description.
+ * CreateNamespacePlugin - This plugin takes a section of the path where the file is located and sets it as the namespace.
+ * For example, Assume that a file containing multiple classes with no namespace is located in /lib/Vendor/Client/v1/.
+ * With this plugin we can take the section Vendor/Client and set it as the classes namespace.
  *
  * @author Juan Manuel Torres <kinojman@gmail.com>
  * @copyright (c) 2015, onema.io
@@ -43,6 +45,11 @@ class CreateNamespace implements EventSubscriberInterface
         return [TraverseEvent::BEFORE => ['onTraverseAddNamespace', 0]];
     }
 
+    /**
+     * Get a slice of the path and set it as the namespace.
+     *
+     * @param TraverseEvent $event
+     */
     public function onTraverseAddNamespace(TraverseEvent $event)
     {
         $directoryPath = $event->getDirectoryPath();
