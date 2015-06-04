@@ -1,18 +1,18 @@
 <?php
 /*
  * This file is part of the Onema ClassyFile Package.
- * For the full copyright and license information, 
- * please view the LICENSE file that was distributed 
+ * For the full copyright and license information,
+ * please view the LICENSE file that was distributed
  * with this source code.
  */
+
 namespace Onema\ClassyFile\Plugin;
 
-use Onema\ClassyFile\Event\ClassyFileEvent;
 use Onema\ClassyFile\Event\TraverseEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * CreateNamespacePlugin - Description. 
+ * CreateNamespacePlugin - Description.
  *
  * @author Juan Manuel Torres <kinojman@gmail.com>
  * @copyright (c) 2015, onema.io
@@ -30,7 +30,6 @@ class CreateNamespace implements EventSubscriberInterface
 
     public function __construct($offset = 0, $length = 1)
     {
-
         $this->offset = $offset;
         $this->length = $length;
     }
@@ -41,7 +40,7 @@ class CreateNamespace implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return [ClassyFileEvent::TRAVERSE => ['onTraverseAddNamespace', 0]];
+        return [TraverseEvent::BEFORE => ['onTraverseAddNamespace', 0]];
     }
 
     public function onTraverseAddNamespace(TraverseEvent $event)
