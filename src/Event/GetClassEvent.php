@@ -1,22 +1,25 @@
 <?php
 /*
  * This file is part of the Onema ClassyFile Package.
- * For the full copyright and license information, 
- * please view the LICENSE file that was distributed 
+ * For the full copyright and license information,
+ * please view the LICENSE file that was distributed
  * with this source code.
  */
+
 namespace Onema\ClassyFile\Event;
 
 use PhpParser\Node\Stmt;
 
 /**
- * GetClassEvent - Description. 
+ * GetClassEvent - Description.
  *
  * @author Juan Manuel Torres <kinojman@gmail.com>
  * @copyright (c) 2015, onema.io
  */
 class GetClassEvent extends ClassyFileEvent
 {
+    const BEFORE = 'classyfile.before_get_class';
+    const AFTER = 'classyfile.after_get_class';
     /**
      * @var mixed
      */
@@ -92,7 +95,6 @@ class GetClassEvent extends ClassyFileEvent
     }
 
     /**
-     * @return null
      */
     public function getFileLocation()
     {
