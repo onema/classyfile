@@ -8,7 +8,6 @@
 
 namespace Onema\Test;
 
-use Onema\ClassyFile\Event\ClassyFileEvent;
 use Onema\ClassyFile\Event\GetClassEvent;
 use Onema\ClassyFile\Plugin\PhpCsFixer;
 use PhpParser\Node\Stmt\Class_;
