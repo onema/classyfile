@@ -1,13 +1,15 @@
 <?php
 /*
  * This file is part of the Onema ClassyFile Package.
- * For the full copyright and license information, 
- * please view the LICENSE file that was distributed 
+ * For the full copyright and license information,
+ * please view the LICENSE file that was distributed
  * with this source code.
  */
+
 namespace Onema\ClassyFile\Plugin;
 
 use Onema\ClassyFile\Event\ClassyFileEvent;
+use Onema\ClassyFile\Event\GetClassEvent;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -21,7 +23,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class ConstantNamesToUpper implements EventSubscriberInterface
 {
-
     /**
      * Returns an array of event names this subscriber wants to listen to.
      *
@@ -29,7 +30,7 @@ class ConstantNamesToUpper implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return [ClassyFileEvent::GET_CLASS => ['onSetClassUpdateConstants', 10]];
+        return [GetClassEvent::BEFORE => ['onSetClassUpdateConstants', 10]];
     }
 
     /**
@@ -61,11 +62,12 @@ class ConstantNamesToUpper implements EventSubscriberInterface
             $countConst = count($statement->consts);
             for ($j = 0; $j < $countConst; $j++) {
                 $constant = $statement->consts[$j];
-                $name = strtoupper(preg_replace('/([^A-Z])([A-Z])/', "$1_$2", $constant->name));
+                $name = strtoupper(preg_replace('/([^A-Z])([A-Z])/', '$1_$2', $constant->name));
                 $constant->name = str_replace('__', '_', $name);
                 $statement->consts[$j] = $constant;
             }
         }
+
         return $statement;
     }
 }
