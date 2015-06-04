@@ -72,10 +72,15 @@ class PhpCsFixer implements EventSubscriberInterface
         $command->run($input, $output);
     }
 
+    public function getArguments()
+    {
+        return $this->arguments;
+    }
+
     protected function createDefaultFixerArguments()
     {
-        if ($this->input->getOption('-vvv')) {
-            $this->arguments[] ='-vvv';
+        if ($this->input->getOption('verbose')) {
+            $this->arguments[] = '--verbose';
         }
     }
 }
