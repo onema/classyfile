@@ -1,21 +1,23 @@
 <?php
 /*
- * This file is part of the Onema {classyfile} Package. 
- * For the full copyright and license information, 
- * please view the LICENSE file that was distributed 
+ * This file is part of the Onema ClassyFile Package.
+ * For the full copyright and license information,
+ * please view the LICENSE file that was distributed
  * with this source code.
  */
+
 namespace Onema\ClassyFile\Plugin;
 
 use Onema\ClassyFile\Event\GetClassEvent;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Onema\ClassyFile\Event\ClassyFileEvent;
 use Symfony\CS\Console\Command\FixCommand;
 
 /**
- * PhpCsFixerPlugin - Description. 
+ * PhpCsFixerPlugin - Description.
  *
  * @author Juan Manuel Torres <kinojman@gmail.com>
  * @copyright (c) 2015, onema.io
@@ -23,11 +25,34 @@ use Symfony\CS\Console\Command\FixCommand;
 class PhpCsFixer implements EventSubscriberInterface
 {
     /**
+     * @var OutputInterface
+     */
+    private $output;
+    /**
+     * @var InputInterface
+     */
+    private $input;
+
+    /**
+     * @var array
+     */
+    private $arguments = [];
+
+    public function __construct(InputInterface $input = null, OutputInterface $output = null)
+    {
+        $this->output = $output;
+        $this->input = $input;
+
+        if (isset($this->input)) {
+            $this->createDefaultFixerArguments();
+        }
+    }
+    /**
      * @return array The event names to listen to
      */
     public static function getSubscribedEvents()
     {
-        return [ClassyFileEvent::AFTER_GET_CLASS => ['onGetClassFixClass', 5]];
+        return [GetClassEvent::AFTER => ['onGetClassFixClass', 5]];
     }
 
     public function onGetClassFixClass(GetClassEvent $event)
@@ -36,11 +61,21 @@ class PhpCsFixer implements EventSubscriberInterface
         $command = new FixCommand();
 
         $arguments = [
-            'path'    => $fileLocation,
+            'path' => $fileLocation,
         ];
 
-        $output = new BufferedOutput();
+        $arguments = array_merge($arguments, $this->arguments);
+
+        $output = isset($this->output) ? $this->output : new BufferedOutput();
+        $output->writeln(sprintf('<info>Running PSR Fixer on %s</info>', $fileLocation));
         $input = new ArrayInput($arguments);
         $command->run($input, $output);
+    }
+
+    protected function createDefaultFixerArguments()
+    {
+        if ($this->input->getOption('-vvv')) {
+            $this->arguments[] ='-vvv';
+        }
     }
 }
