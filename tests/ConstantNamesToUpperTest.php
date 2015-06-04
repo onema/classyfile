@@ -36,10 +36,9 @@ class ConstantNamesToUpperTest extends \PHPUnit_Framework_TestCase
         $plugin = new ConstantNamesToUpper();
         $plugin->onSetClassUpdateConstants($event);
 
-        $this->assertEquals('TWENTY', $event->getStatements()->stmts[0]->consts[0]->name);
-        $this->assertEquals('TWENTY_ONE', $event->getStatements()->stmts[1]->consts[0]->name);
-        $this->assertEquals('TWENTY_TWO', $event->getStatements()->stmts[2]->consts[0]->name);
-        $this->assertEquals('TWENTY_THREE', $event->getStatements()->stmts[3]->consts[0]->name);
+        foreach ($event->getStatements()->stmts as $constant) {
+            $this->assertEquals($constant->consts[0]->value->value, $constant->consts[0]->name);
+        }
     }
 
     public function testSubscribedEvents()
