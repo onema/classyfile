@@ -1,20 +1,22 @@
 <?php
 /*
  * This file is part of the Onema ClassyFile Package.
- * For the full copyright and license information, 
- * please view the LICENSE file that was distributed 
+ * For the full copyright and license information,
+ * please view the LICENSE file that was distributed
  * with this source code.
  */
+
 namespace Onema\ClassyFile\Plugin;
 
-use League\Flysystem\FilesystemInterface;
-use Onema\ClassyFile\Event\ClassyFileEvent;
+use League\Flysystem\Adapter\AbstractAdapter;
+use League\Flysystem\AdapterInterface;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Util;
 use Onema\ClassyFile\Event\GetClassEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-
 /**
- * GenerateClassFile - Description. 
+ * GenerateClassFile - Description.
  *
  * @author Juan Manuel Torres <kinojman@gmail.com>
  * @copyright (c) 2015, onema.io
@@ -26,9 +28,9 @@ class GenerateClassFile implements EventSubscriberInterface
      */
     private $filesystem;
 
-    public function __construct(FilesystemInterface $filesystem)
+    public function __construct(AdapterInterface $adapter)
     {
-        $this->filesystem = $filesystem;
+        $this->filesystem = new Filesystem($adapter);
     }
 
     /**
@@ -36,7 +38,7 @@ class GenerateClassFile implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return [ClassyFileEvent::AFTER_GET_CLASS => ['onGetClassGenerateFile', 10]];
+        return [GetClassEvent::AFTER => ['onGetClassGenerateFile', 10]];
     }
 
     /**
@@ -58,6 +60,12 @@ class GenerateClassFile implements EventSubscriberInterface
 
         $location = sprintf('%s/%s.php', $fileLocation, $name);
         $this->filesystem->put($location, $code);
-        $event->setFileLocation($location);
+        $adapter = $this->filesystem->getAdapter();
+
+        if ($adapter instanceof AbstractAdapter) {
+            $prefix = $adapter->getPathPrefix();
+            $location = Util::normalizePath($location);
+            $event->setFileLocation(sprintf('%s%s', $prefix, $location));
+        }
     }
 }
