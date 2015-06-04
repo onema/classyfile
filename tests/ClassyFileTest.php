@@ -1,10 +1,11 @@
 <?php
 /*
  * This file is part of the Onema ClassyFile Package.
- * For the full copyright and license information, 
- * please view the LICENSE file that was distributed 
+ * For the full copyright and license information,
+ * please view the LICENSE file that was distributed
  * with this source code.
  */
+
 namespace Onema\Test;
 
 use League\Flysystem\Adapter\Local;
@@ -13,7 +14,7 @@ use Onema\ClassyFile\ClassyFile;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
- * ClassyFileTest - Description. 
+ * ClassyFileTest - Description.
  *
  * @author Juan Manuel Torres <kinojman@gmail.com.com>
  * @copyright (c) 2015, Onema
@@ -145,12 +146,15 @@ class ClassyFileTest extends \PHPUnit_Framework_TestCase
         $classyfile->setTemplate(function ($namespace, $uses, $comments, $code) use (&$i) {
             if ($i == 0) {
                 $i++;
+
                 return $namespace; // returns namespace Service\WithBad\ClassFiles;
             } elseif ($i == 1) {
                 $i++;
+
                 return $comments;  // returns /** comment */
             } elseif ($i == 2) {
                 $i++;
+
                 return $uses;      // returns use \DateTime;
             }
         });

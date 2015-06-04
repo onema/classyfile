@@ -5,9 +5,9 @@
  * please view the LICENSE file that was distributed 
  * with this source code.
  */
+
 namespace Onema\Test;
 
-use League\Flysystem\Filesystem;
 use Onema\ClassyFile\Event\ClassyFileEvent;
 use Onema\ClassyFile\Event\GetClassEvent;
 use Onema\ClassyFile\Plugin\GenerateClassFile;
@@ -48,7 +48,7 @@ class GenerateClassFileTest extends \PHPUnit_Framework_TestCase
         $event->setFileLocation('/tmp/');
         $event->setCode('<?php echo "some code";');
 
-        $plugin = new GenerateClassFile(new Filesystem($mockAdapter));
+        $plugin = new GenerateClassFile($mockAdapter);
 
         $plugin->onGetClassGenerateFile($event);
     }
@@ -56,6 +56,6 @@ class GenerateClassFileTest extends \PHPUnit_Framework_TestCase
     public function testSubscribedEvents()
     {
         $subscribedEvents = GenerateClassFile::getSubscribedEvents();
-        $this->assertArrayHasKey(ClassyFileEvent::AFTER_GET_CLASS, $subscribedEvents, 'The subscriber is not returning a valid event.');
+        $this->assertArrayHasKey(GetClassEvent::AFTER, $subscribedEvents, 'The subscriber is not returning a valid event.');
     }
 }
