@@ -45,14 +45,6 @@ class GenerateClassesEvent extends Event
     }
 
     /**
-     * @param \Symfony\Component\Finder\Finder $finder
-     */
-    public function setFinder($finder)
-    {
-        $this->finder = $finder;
-    }
-
-    /**
      * @return array
      */
     public function getClasses()
