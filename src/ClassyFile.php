@@ -13,6 +13,7 @@ use League\Flysystem\AdapterInterface;
 use Onema\ClassyFile\Event\GenerateClassesEvent;
 use Onema\ClassyFile\Event\GetClassEvent;
 use Onema\ClassyFile\Event\TraverseEvent;
+use Onema\ClassyFile\Exception\InvalidTemplateException;
 use Onema\ClassyFile\Plugin\CreateNamespace;
 use Onema\ClassyFile\Plugin\GenerateClassFile;
 use Onema\ClassyFile\Exception\ClassToFileRuntimeException;
@@ -36,6 +37,8 @@ use Symfony\Component\Finder\Finder;
  */
 class ClassyFile
 {
+    const VERSION = '1.0.0';
+
     /**
      * @var \PhpParser\PrettyPrinter\Standard
      */
@@ -104,10 +107,15 @@ class ClassyFile
 
     /**
      * @param callable $template
+     * @throws \Onema\ClassyFile\Exception\InvalidTemplateException
      */
     public function setTemplate($template)
     {
-        $this->template = $template;
+        if (is_callable($template)) {
+            $this->template = $template;
+        } else {
+            throw new InvalidTemplateException('The template must be callable.');
+        }
     }
 
     /**
