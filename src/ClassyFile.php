@@ -174,7 +174,7 @@ class ClassyFile
 
         $event->setClasses($generatedClasses);
         $this->dispatcher->dispatch(GenerateClassesEvent::AFTER, $event);
-        return $generatedClasses;
+        return $event->getClasses();
     }
 
     /**
