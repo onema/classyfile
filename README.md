@@ -21,7 +21,12 @@ See the [Documentation](http://classyfile.readthedocs.org/en/latest/) for more i
 ## Installation
 
 ### Install it using composer
- 
+
+```
+composer require 'onema/classyfile:^1.0.0'
+```
+
+Or manually add it to the `composer.json` file
 
 ```json
 {
@@ -41,3 +46,6 @@ cd classyfile
 composer install
 ```
 After it has been installed you can run the command: `php classyfile`
+
+## Documentation
+See the [documentation](docs/index.md) section.
