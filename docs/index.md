@@ -13,6 +13,12 @@ This library uses the [nikic/PHP-Parser](https://github.com/nikic/PHP-Parser) to
 
 ### Install it using composer 
 
+```
+composer require 'onema/classyfile:^1.0.0'
+```
+
+Or manually add it to the `composer.json` file
+
 ```json
 {
     "require": {
