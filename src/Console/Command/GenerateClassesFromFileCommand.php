@@ -1,14 +1,16 @@
 <?php
 /*
  * This file is part of the Onema ClassyFile Package.
- * For the full copyright and license information, 
- * please view the LICENSE file that was distributed 
+ * For the full copyright and license information,
+ * please view the LICENSE file that was distributed
  * with this source code.
  */
-namespace Onema\ClassyFile\Command;
+
+namespace Onema\ClassyFile\Console\Command;
 
 use Onema\ClassyFile\ClassyFile;
 use Onema\ClassyFile\Plugin\ConstantNamesToUpper;
+use Onema\ClassyFile\Plugin\PhpCsFixer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -67,6 +69,12 @@ class GenerateClassesFromFileCommand extends Command
                 InputOption::VALUE_NONE,
                 'Adds a plugin to convert constant names to uppercase e.g. constantName to CONSTANT_NAME.'
             )
+            ->addOption(
+                'psr-fix',
+                null,
+                InputOption::VALUE_NONE,
+                'Run all PHP CS Fixers. This will fix a lot of formatting issues.'
+            )
         ;
     }
 
@@ -82,6 +90,11 @@ class GenerateClassesFromFileCommand extends Command
 
         if ($input->getOption('constants-to-upper')) {
             $plugin = new ConstantNamesToUpper();
+            $dispatcher->addSubscriber($plugin);
+        }
+
+        if ($input->getOption('psr-fix')) {
+            $plugin = new PhpCsFixer($input, $output);
             $dispatcher->addSubscriber($plugin);
         }
 
