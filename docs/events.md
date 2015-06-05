@@ -1,5 +1,5 @@
 # Events
-`ClassyFile` emits three events to allow you to extend the basic functionality of this library.
+`ClassyFile` emits several events to allow you to extend the basic functionality of this library.
 
 ## classyfile.before_generate_classes
 This event is emitted after the file finder has been setup and before checkign each `php` file. The event will contain the following values
