@@ -165,6 +165,7 @@ class ClassyFileTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("use DateTime;\n", $code['mock_classes_style1.php']['Scale']);
     }
 
+
     public function testBadTemplate()
     {
         $this->setExpectedException('\Onema\ClassyFile\Exception\InvalidTemplateException', 'The template must be callable.');

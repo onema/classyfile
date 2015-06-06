@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the CPCStrategy ClassyFile Package.
+ * This file is part of the Onema ClassyFile Package.
  * For the full copyright and license information, 
  * please view the LICENSE file that was distributed 
  * with this source code.
@@ -18,8 +18,8 @@ use Symfony\Component\Console\Input\InputOption;
 /**
  * PhpCsFixerPluginTest - Description. 
  *
- * @author Juan Manuel Torres <juan@cpcstrategy.com>
- * @copyright (c) 2015, CPC Strategy Development Team
+ * @author Juan Manuel Torres <kinjman@gmail.com>
+ * @copyright (c) 2015, Onema
  * @group fixer
  */
 class PhpCsFixerTest extends \PHPUnit_Framework_TestCase
