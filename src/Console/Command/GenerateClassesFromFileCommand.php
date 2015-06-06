@@ -11,6 +11,7 @@ namespace Onema\ClassyFile\Console\Command;
 use Onema\ClassyFile\ClassyFile;
 use Onema\ClassyFile\Plugin\ConstantNamesToUpper;
 use Onema\ClassyFile\Plugin\PhpCsFixer;
+use Onema\ClassyFile\Template\BasicClassTemplate;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
- * GenerateClassesFromFileCommand - Description.
+ * GenerateClassesFromFileCommand - Command to run classyfile.
  *
  * @author Juan Manuel Torres <kinojman@gmail.com>
  * @copyright (c) 2015, Onema
@@ -75,7 +76,22 @@ class GenerateClassesFromFileCommand extends Command
                 InputOption::VALUE_NONE,
                 'Run all PHP CS Fixers. This will fix a lot of formatting issues.'
             )
-        ;
+            ->addOption(
+                'remove-top-comment',
+                null,
+                InputOption::VALUE_NONE,
+                'Removes the top file comment from all files.'
+            )
+            ->setHelp(<<<EOT
+The <info>%command.name%</info> command is used to refactor classes that have been placed in a single file along
+with other classes (multiple classes per file). The command will open each file within a single directory
+(non recursively) and generate one file per class and save each file in the "code-destination". Several options
+are available to help refactoring these classes and to make them PSR-1 and PSR-2.
+
+<info>php classyfile %command.name%</info>
+
+EOT
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -96,6 +112,10 @@ class GenerateClassesFromFileCommand extends Command
         if ($input->getOption('psr-fix')) {
             $plugin = new PhpCsFixer($input, $output);
             $dispatcher->addSubscriber($plugin);
+        }
+
+        if ($input->getOption('removet-top-comment')) {
+            $classyfile->setTemplate(new BasicClassTemplate(''), 'getTemplate');
         }
 
         $classyfile->setEventDispatcher($dispatcher);
