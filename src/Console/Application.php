@@ -40,12 +40,6 @@ EOT;
     public function getLongVersion()
     {
         $version = parent::getLongVersion().' by <comment>Juan Manuel Torres</comment>';
-        $commit = '@git-commit@';
-
-        if ('@'.'git-commit@' !== $commit) {
-            $version .= ' ('.substr($commit, 0, 7).')';
-        }
-
         return $version;
     }
 }
