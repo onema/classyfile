@@ -17,7 +17,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\CS\Console\Command\FixCommand;
 
 /**
- * PhpCsFixerPlugin - Description.
+ * PhpCsFixerPlugin - A plugin that provides a wrapper around the PHP CS Fixer. It will run the fixer on a class
+ * that has been generated and saved as a file. It will depend on GenerateClassFile or similar plugin that provies
+ * the location of the newly generated class.
  *
  * @author Juan Manuel Torres <kinojman@gmail.com>
  * @copyright (c) 2015, onema.io

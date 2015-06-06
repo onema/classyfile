@@ -16,7 +16,8 @@ use Onema\ClassyFile\Event\GetClassEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * GenerateClassFile - Description.
+ * GenerateClassFile - Plugin to save the generated classes as files. This plugin uses the Flysystem Filesystem class
+ * and any supported adapter can be used to save files locally or a remote location.
  *
  * @author Juan Manuel Torres <kinojman@gmail.com>
  * @copyright (c) 2015, onema.io
