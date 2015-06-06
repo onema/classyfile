@@ -11,7 +11,7 @@ namespace Onema\ClassyFile\Event;
 use PhpParser\Node\Stmt;
 
 /**
- * GetClassEvent - Description.
+ * GetClassEvent - Event used in the "get class" process.
  *
  * @author Juan Manuel Torres <kinojman@gmail.com>
  * @copyright (c) 2015, onema.io

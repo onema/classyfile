@@ -12,7 +12,7 @@ use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Finder\Finder;
 
 /**
- * GenerateClassesEvent - Description. 
+ * GenerateClassesEvent - Event used in the "generate class" process.
  *
  * @author Juan Manuel Torres <kinojman@gmail.com>
  * @copyright (c) 2015, onema.io

@@ -9,7 +9,7 @@
 namespace Onema\ClassyFile\Event;
 
 /**
- * GetClassEvent - Description.
+ * GetClassEvent - Event used in the "traverse" process..
  *
  * @author Juan Manuel Torres <kinojman@gmail.com>
  * @copyright (c) 2015, onema.io

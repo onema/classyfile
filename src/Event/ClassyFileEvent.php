@@ -11,7 +11,7 @@ namespace Onema\ClassyFile\Event;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * SetClassEvent - Description.
+ * SetClassEvent - Basic event.
  *
  * @author Juan Manuel Torres <kinojman@gmail.com>
  * @copyright (c) 2015, onema.io
