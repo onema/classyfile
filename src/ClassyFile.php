@@ -17,6 +17,7 @@ use Onema\ClassyFile\Exception\InvalidTemplateException;
 use Onema\ClassyFile\Plugin\CreateNamespace;
 use Onema\ClassyFile\Plugin\GenerateClassFile;
 use Onema\ClassyFile\Exception\ClassToFileRuntimeException;
+use Onema\ClassyFile\Template\BasicClassTemplate;
 use PhpParser\Error;
 use PhpParser\Lexer;
 use PhpParser\Node\Stmt\Class_;
@@ -30,7 +31,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Finder\Finder;
 
 /**
- * ClassyFile - Description.
+ * ClassyFile - Main class refactor classes.
  *
  * @author Juan Manuel Torres <kinojman@gmail.com>
  * @copyright (c) 2015, Onema
@@ -68,17 +69,7 @@ class ClassyFile
         }
 
         $this->prettyPrinter = new Standard();
-        $this->setTemplate(function ($namespace, $uses, $comments, $code) {
-            return '<?php'.
-            PHP_EOL.PHP_EOL.
-            $namespace.
-            PHP_EOL.
-            $uses.
-            PHP_EOL.
-            $comments.
-            PHP_EOL.
-            $code.
-            PHP_EOL;});
+        $this->setTemplate(new BasicClassTemplate(), 'getTemplate');
     }
 
     /**
@@ -106,13 +97,18 @@ class ClassyFile
     }
 
     /**
-     * @param callable $template
+     * @param callable|object $templateCallback
+     * @param null $method
      * @throws \Onema\ClassyFile\Exception\InvalidTemplateException
+     *
+     *
      */
-    public function setTemplate($template)
+    public function setTemplate($templateCallback, $method = null)
     {
-        if (is_callable($template)) {
-            $this->template = $template;
+        if (is_callable($templateCallback)) {
+            $this->template = $templateCallback;
+        } elseif (is_object($templateCallback)) {
+            $this->template = [$templateCallback, $method];
         } else {
             throw new InvalidTemplateException('The template must be callable.');
         }
