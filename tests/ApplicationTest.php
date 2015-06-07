@@ -71,4 +71,35 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
         $filesystem->deleteDir('/Service/');
     }
+
+    public function testConvertCommandWithNamespaceOption()
+    {
+        $codeLocation = __DIR__.'/mock/src/VendorName/ProjectName/Category/ProductName/v123456/';
+        $codeLocationArray = explode('/', $codeLocation);
+        $codeLocationArray = array_splice($codeLocationArray, 6, 4);
+        $directory = $codeLocationArray[0];
+        $destinationLocation = implode('/', $codeLocationArray);
+        $codeDestination = '/tmp/';
+
+        $input = new ArrayInput([
+            'convert',
+            'code-location' => $codeLocation,
+            '--code-destination' => '/tmp',
+            '--create-namespace' => true,
+            '--offset' => 6,
+            '--length' => 4,
+        ]);
+        $output = new BufferedOutput();
+        $app = new Application();
+
+        $app->get('convert')->run($input, $output);
+
+        $this->assertFileExists(sprintf('/%s/%s/Date.php', $codeDestination, $destinationLocation));
+        $this->assertFileExists(sprintf('/%s/%s/DateRange.php', $codeDestination, $destinationLocation));
+        $this->assertFileExists(sprintf('/%s/%s/OrderBy.php', $codeDestination, $destinationLocation));
+
+        // Delete all files/
+        $filesystem = new Filesystem(new Local($codeDestination));
+        $filesystem->deleteDir($directory);
+    }
 }
