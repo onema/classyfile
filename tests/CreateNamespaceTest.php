@@ -8,7 +8,6 @@
 
 namespace Onema\Test;
 
-use Onema\ClassyFile\Event\ClassyFileEvent;
 use Onema\ClassyFile\Event\TraverseEvent;
 use Onema\ClassyFile\Plugin\CreateNamespace;
 
