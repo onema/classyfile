@@ -114,7 +114,7 @@ EOT
             $dispatcher->addSubscriber($plugin);
         }
 
-        if ($input->getOption('removet-top-comment')) {
+        if ($input->getOption('remove-top-comment')) {
             $classyfile->setTemplate(new BasicClassTemplate(''), 'getTemplate');
         }
 
