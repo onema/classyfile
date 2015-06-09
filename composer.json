@@ -9,12 +9,13 @@
         "email": "kinojman@gmail.com"
     }],
     "require": {
-        "php": ">=5.5",
+        "php": ">=5.4",
         "nikic/php-parser": "2.0.*@dev",
-        "symfony/event-dispatcher" : "3.0.*@dev",
-        "symfony/console": "3.0.*@dev",
+        "symfony/finder": "^2.7",
+        "symfony/console": "^2.7",
+        "symfony/event-dispatcher" : "^2.7",
         "league/flysystem": "^1.0",
-        "symfony/finder": "3.0.*@dev"
+        "fabpot/php-cs-fixer": "^1.8.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.6",

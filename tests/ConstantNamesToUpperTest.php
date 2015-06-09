@@ -1,19 +1,20 @@
 <?php
 /*
  * This file is part of the Onema ClassyFile Package.
- * For the full copyright and license information, 
- * please view the LICENSE file that was distributed 
+ * For the full copyright and license information,
+ * please view the LICENSE file that was distributed
  * with this source code.
  */
+
 namespace Onema\Test;
-use Onema\ClassyFile\Event\ClassyFileEvent;
+
 use Onema\ClassyFile\Event\GetClassEvent;
 use Onema\ClassyFile\Plugin\ConstantNamesToUpper;
 use PhpParser\Lexer;
 use PhpParser\Parser;
 
 /**
- * ConstantNamesToUpperTest - Description. 
+ * ConstantNamesToUpperTest - Description.
  *
  * @author Juan Manuel Torres <kinojman@gmail.com>
  * @copyright (c) 2015, onema
@@ -34,15 +35,14 @@ class ConstantNamesToUpperTest extends \PHPUnit_Framework_TestCase
         $plugin = new ConstantNamesToUpper();
         $plugin->onSetClassUpdateConstants($event);
 
-        $this->assertEquals('TWENTY', $event->getStatements()->stmts[0]->consts[0]->name);
-        $this->assertEquals('TWENTY_ONE', $event->getStatements()->stmts[1]->consts[0]->name);
-        $this->assertEquals('TWENTY_TWO', $event->getStatements()->stmts[2]->consts[0]->name);
-        $this->assertEquals('TWENTY_THREE', $event->getStatements()->stmts[3]->consts[0]->name);
+        foreach ($event->getStatements()->stmts as $constant) {
+            $this->assertEquals($constant->consts[0]->value->value, $constant->consts[0]->name);
+        }
     }
 
     public function testSubscribedEvents()
     {
         $subscribedEvents = ConstantNamesToUpper::getSubscribedEvents();
-        $this->assertArrayHasKey(ClassyFileEvent::GET_CLASS, $subscribedEvents, 'The subscriber is not returning a valid event.');
+        $this->assertArrayHasKey(GetClassEvent::BEFORE, $subscribedEvents, 'The subscriber is not returning a valid event.');
     }
 }

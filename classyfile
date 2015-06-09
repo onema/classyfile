@@ -4,20 +4,19 @@ set_time_limit(0);
 
 $_ENV['HOME'] = getenv('HOME');
 
+if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 50400) {
+    fwrite(STDERR, "PHP needs to be a minimum version of PHP 5.4.0\n");
+    exit(1);
+}
+
 if (file_exists(__DIR__.'/vendor/autoload.php')) {
     require __DIR__.'/vendor/autoload.php';
 } else {
+    // it was installed via composer
     require __DIR__.'/../../autoload.php';
 }
 
-$title = '  _____ __    ___    ____ ______  __ ____ ____ __    ____
- / ___// /   / _ |  / __// __/\ \/ // __//  _// /   / __/
-/ /__ / /__ / __ | _\ \ _\ \   \  // _/ _/ / / /__ / _/
-\___//____//_/ |_|/___//___/   /_//_/  /___//____//___/  ';
+use Onema\ClassyFile\Console\Application;
 
-
-$application = new Symfony\Component\Console\Application($title, '0.5.0');
-$application->addCommands([
-    new \Onema\ClassyFile\Command\GenerateClassesFromFileCommand(),
-]);
+$application = new Application();
 $application->run();

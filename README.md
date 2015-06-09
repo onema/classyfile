@@ -15,16 +15,24 @@ This library uses the [nikic/PHP-Parser](https://github.com/nikic/PHP-Parser) to
 See the [Documentation](http://classyfile.readthedocs.org/en/latest/) for more information. 
 
 ## Requirements
-  - PHP 5.5.0
+ 
+  - PHP 5.4.0
+  
 ## Installation
-### Install it using composer 
+
+### Install it using composer
+
+```
+composer require 'onema/classyfile:^1.0.0'
+```
+
+Or manually add it to the `composer.json` file
 
 ```json
 {
     "require": {
-        "onema/classyfile": "^0.5.0@dev"
-    },
-    "minimum-stability": "dev"
+        "onema/classyfile": "^1.0.0"
+    }
 }
 ```
 
@@ -38,3 +46,6 @@ cd classyfile
 composer install
 ```
 After it has been installed you can run the command: `php classyfile`
+
+## Documentation
+See the [documentation](docs/index.md) section.
