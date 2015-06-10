@@ -14,7 +14,7 @@
         "symfony/finder": "^2.7",
         "symfony/console": "^2.7",
         "symfony/event-dispatcher" : "^2.7",
-        "league/flysystem": "^1.0",
+        "league/flysystem": "^1.0.4",
         "fabpot/php-cs-fixer": "^1.8.1"
     },
     "require-dev": {
