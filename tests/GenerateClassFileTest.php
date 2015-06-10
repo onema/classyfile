@@ -30,9 +30,9 @@ class GenerateClassFileTest extends \PHPUnit_Framework_TestCase
 
         // plugin calls this method 3 times, internally write calls this method each time checking if
         // the file exist. write has must always return false otherwise it will throw an exception.
-        $mockAdapter->expects($this->exactly(3))
+        $mockAdapter->expects($this->exactly(2))
             ->method('has')
-            ->will($this->onConsecutiveCalls(false, false, false));
+            ->will($this->onConsecutiveCalls(false, false));
 
         $mockAdapter->expects($this->once())
             ->method('createDir')
