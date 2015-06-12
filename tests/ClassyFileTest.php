@@ -54,18 +54,15 @@ class ClassyFileTest extends \PHPUnit_Framework_TestCase
         // plugin calls this method 3 times, internally put calls this method each time checking if
         // the file exist.
 
-        $mockAdapter->expects($this->exactly(9))
+        $mockAdapter->expects($this->exactly(6))
             ->method('has')
             ->will($this->onConsecutiveCalls(
                 false, // create dir
                 false, // put file -> write
-                false, // write file
                 true, // create dir
                 true, // put file -> update
-                true, // update file
                 true, // create dir
-                true, // put file -> update
-                true // update file
+                true // put file -> update
             ));
 
         $mockAdapter->expects($this->once())
