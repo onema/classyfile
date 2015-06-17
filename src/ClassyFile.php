@@ -60,6 +60,10 @@ class ClassyFile
      */
     private $template;
 
+    /**
+     * @param EventDispatcherInterface $dispatcher
+     * @throws InvalidTemplateException
+     */
     public function __construct(EventDispatcherInterface $dispatcher = null)
     {
         if (!isset($dispatcher)) {
