@@ -21,7 +21,7 @@ class BasicClassTemplate
      */
     private $topComment;
 
-    public function __construct ($topComment = null)
+    public function __construct($topComment = null)
     {
         if (!isset($topComment)) {
             $date = new \DateTime();
@@ -50,13 +50,13 @@ EOT;
      * @param $code
      * @return string
      */
-    public function getTemplate ($namespace, $useStatements, $comments, $code)
+    public function getTemplate($namespace, $useStatements, $comments, $code)
     {
-        return '<?php'. PHP_EOL.
+        return '<?php'.PHP_EOL.
         $this->topComment.
-        $namespace . PHP_EOL.
-        $useStatements . PHP_EOL. PHP_EOL.
-        $comments . PHP_EOL.
-        $code . PHP_EOL;
+        $namespace.PHP_EOL.
+        $useStatements.PHP_EOL.PHP_EOL.
+        $comments.PHP_EOL.
+        $code.PHP_EOL;
     }
 }
