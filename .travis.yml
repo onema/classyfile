@@ -14,6 +14,8 @@ before_install:
 before_script:
  - wget http://getcomposer.org/composer.phar
  - php composer.phar install --dev --no-interaction
+ - curl -LSs http://box-project.github.io/box2/installer.php | php
+ - mkdir -p build/artifacts
 
 script:
  - mkdir -p build/logs
@@ -23,8 +25,18 @@ after_script:
  - curl -L  https://github.com/onema/php-coveralls/releases/download/v1.0.0-alpha1/coveralls.phar -o coveralls.phar
  - php coveralls.phar -v
 
+before_deploy:
+  - php composer.phar install --no-dev --no-interaction
+  - php box.phar build
+  - rm box.phar
 
-# whitelist
-branches:
-  only:
-    - develop
+deploy:
+  provider: releases
+  api_key:
+    secure: 4EvjoRkMoXj+sIUB5s4yfLcr0zNInmX9COXaGRgPTw0g7P1qH1j/PR0eOXgOFgln54dRgWH4+l9/2OLVL/x4Qo2ZbTAeT5d8IXDOrLNSCNrtINY2x6XhEoYp17lAIs1OkT1VreuCGu38/eTQ3gd2V4Xm5X+vRBnpF44xnWepgy0TJ091U0kbLs4vymquFL3RHCr3NH8Aa1eE9B/8T5+gF1nDpeegBnJNLPGU8FMre/ldQBv3umRKHnyO3cXs28993USq+FfLqdvR6OhvsNu862ZvAl9GJ+SyClVekvkgGu5EffaHDB0PhrFiFPNzna52fETW9L1kDbrGkZ73xG3mrDyjM1XEn3YFDM/fuoTG6rscGOex+5+tImHiAR7fhzLzx/mkIExNdCRBIYLRMjxKdT7NqhGI7b+iyS4Oz1GQYqeMIkyb6g5QrFr5IVUnWNB3ZI8CEXZbIUP0RV0NY8j2um+DOdUwK9cGzNYS8dSkWA2P9VskiHWpKJpIam/lT8eRaLvChUPjGrRre73I0LzBMZn6z94sPAhCEqMIhjDQX+O+gZ7ew0/pfju2W6K5Oijy2Df4hBCZADqrUsZUAOqetaeHJ3Q29iRQUZjJdmbWWPlXKFBmklmTEhaPYyxX6qvyo16nBqOs6JlJiGtlEPEIkOQ5hqXRj+8sQN1V0SbhXXc=
+  file: build/artifacts/classyfile.phar
+  on:
+    repo: onema/classyfile
+    tags: true
+    all_branches: true
+    php: 5.5
