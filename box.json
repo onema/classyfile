@@ -1,0 +1,17 @@
+{
+  "alias": "classyfile.phar",
+  "chmod": "0644",
+  "directories": ["src"],
+  "extract": true,
+  "finder": [
+    {
+      "name": ["*.php", "*.pem"],
+      "exclude": ["tests"],
+      "in": "vendor"
+    }
+  ],
+  "git-version": "package_version",
+  "main": "classyfile",
+  "output": "build/artifacts/classyfile.phar",
+  "stub": true
+}
