@@ -184,7 +184,7 @@ class ClassyFile
 
                 $generatedClasses[$filename] = $this->traverseStatements($statements, $namespace);
             } catch (Error $e) {
-                throw new ClassToFileRuntimeException(sprintf('Parse Error: %s', $e->getMessage()));
+                throw new ClassToFileRuntimeException(sprintf('Parse Error in file %s: %s', $file, $e->getMessage()));
             }
         }
 
