@@ -105,7 +105,7 @@ class ClassyFile
 
     /**
      * @param callable|object $templateCallback
-     * @param null $method
+     * @param string $method
      * @throws \Onema\ClassyFile\Exception\InvalidTemplateException
      *
      *
